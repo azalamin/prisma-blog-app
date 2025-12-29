@@ -7,9 +7,15 @@ import { postRouter } from "./modules/post/post.router";
 
 const app: Application = express();
 
+app.use(
+	cors({
+		origin: process.env.APP_URL || "http://locaholhost:4000",
+		credentials: true,
+	})
+);
+
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
-app.use(cors());
 app.use(express.json());
 
 app.use("/posts", postRouter);
