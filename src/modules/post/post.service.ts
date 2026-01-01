@@ -2,6 +2,12 @@ import { Post } from "../../../generated/prisma/client";
 import { PostWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 
+type GetPostsParams = {
+	search: string | undefined;
+	tags: string[];
+	isFeatured: boolean | undefined;
+};
+
 const createPost = async (
 	data: Omit<Post, "id" | "createdAt" | "updatedAt" | "authorId">,
 	userId: string
@@ -17,11 +23,13 @@ const createPost = async (
 	return result;
 };
 
-const getPosts = async ({ search, tags }: { search: string | undefined; tags: string[] }) => {
-	const andConditions: PostWhereInput[] = [];
+const getPosts = async ({ search, tags, isFeatured }: GetPostsParams) => {
+	const queryConditions: PostWhereInput[] = [];
+
+	console.log({ isFeatured });
 
 	if (search) {
-		andConditions.push({
+		queryConditions.push({
 			OR: [
 				{
 					title: {
@@ -45,16 +53,25 @@ const getPosts = async ({ search, tags }: { search: string | undefined; tags: st
 	}
 
 	if (tags.length > 0) {
-		andConditions.push({
+		queryConditions.push({
 			tags: {
 				hasEvery: tags,
 			},
 		});
 	}
 
-	const where: PostWhereInput = andConditions.length > 0 ? { AND: andConditions } : {};
+	if (typeof isFeatured === "boolean") {
+		queryConditions.push({
+			isFeatured,
+		});
+	}
 
-	const result = await prisma.post.findMany({ where });
+	const result = await prisma.post.findMany({
+		where: {
+			AND: queryConditions.length > 0 ? queryConditions : [],
+		},
+	});
+
 	return result;
 };
 
