@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { PostStatus } from "../../../generated/prisma/enums";
 import { PostService } from "./post.service";
 
 const createPost = async (req: Request, res: Response) => {
@@ -27,9 +28,20 @@ const getPosts = async (req: Request, res: Response) => {
 		const { search } = req.query;
 		const tags = req.query.tags ? (req.query.tags as string).split(",") : [];
 		const searchString = typeof search === "string" ? search : undefined;
-		const isFeatured = req.query.isFeatured ? req.query.isFeatured === "true" : undefined;
 
-		const result = await PostService.getPosts({ search: searchString, tags, isFeatured });
+		// true or false
+		const isFeatured = req.query.isFeatured
+			? req.query.isFeatured === "true"
+				? true
+				: req.query.isFeatured === "false"
+				? false
+				: undefined
+			: undefined;
+
+		const status = req.query.status as PostStatus | undefined;
+
+		const result = await PostService.getPosts({ search: searchString, tags, isFeatured, status });
+
 		res.status(200).json({
 			success: true,
 			data: result,

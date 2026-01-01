@@ -1,4 +1,4 @@
-import { Post } from "../../../generated/prisma/client";
+import { Post, PostStatus } from "../../../generated/prisma/client";
 import { PostWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 
@@ -6,6 +6,7 @@ type GetPostsParams = {
 	search: string | undefined;
 	tags: string[];
 	isFeatured: boolean | undefined;
+	status: PostStatus | undefined;
 };
 
 const createPost = async (
@@ -23,7 +24,7 @@ const createPost = async (
 	return result;
 };
 
-const getPosts = async ({ search, tags, isFeatured }: GetPostsParams) => {
+const getPosts = async ({ search, tags, isFeatured, status }: GetPostsParams) => {
 	const queryConditions: PostWhereInput[] = [];
 
 	console.log({ isFeatured });
@@ -63,6 +64,12 @@ const getPosts = async ({ search, tags, isFeatured }: GetPostsParams) => {
 	if (typeof isFeatured === "boolean") {
 		queryConditions.push({
 			isFeatured,
+		});
+	}
+
+	if (status === "ARCHIVED" || status === "DRAFT" || status === "PUBLISHED") {
+		queryConditions.push({
+			status,
 		});
 	}
 
