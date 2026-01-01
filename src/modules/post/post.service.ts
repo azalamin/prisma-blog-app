@@ -7,6 +7,7 @@ type GetPostsParams = {
 	tags: string[];
 	isFeatured: boolean | undefined;
 	status: PostStatus | undefined;
+	authorId: string | undefined;
 };
 
 const createPost = async (
@@ -24,7 +25,7 @@ const createPost = async (
 	return result;
 };
 
-const getPosts = async ({ search, tags, isFeatured, status }: GetPostsParams) => {
+const getPosts = async ({ search, tags, isFeatured, status, authorId }: GetPostsParams) => {
 	const queryConditions: PostWhereInput[] = [];
 
 	console.log({ isFeatured });
@@ -70,6 +71,12 @@ const getPosts = async ({ search, tags, isFeatured, status }: GetPostsParams) =>
 	if (status === "ARCHIVED" || status === "DRAFT" || status === "PUBLISHED") {
 		queryConditions.push({
 			status,
+		});
+	}
+
+	if (authorId) {
+		queryConditions.push({
+			authorId,
 		});
 	}
 

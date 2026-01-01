@@ -40,7 +40,15 @@ const getPosts = async (req: Request, res: Response) => {
 
 		const status = req.query.status as PostStatus | undefined;
 
-		const result = await PostService.getPosts({ search: searchString, tags, isFeatured, status });
+		const authorId = req.query.authorId as string | undefined;
+
+		const result = await PostService.getPosts({
+			search: searchString,
+			tags,
+			isFeatured,
+			status,
+			authorId,
+		});
 
 		res.status(200).json({
 			success: true,
