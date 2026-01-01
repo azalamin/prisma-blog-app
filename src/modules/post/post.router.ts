@@ -4,7 +4,7 @@ import { PostController } from "./post.controller";
 
 const router = Router();
 
-router.post("/", auth(UserRole.ADMIN, UserRole.USER), PostController.createPost);
 router.get("/", PostController.getPosts);
+router.post("/", auth(UserRole.ADMIN, UserRole.USER), PostController.createPost);
 
 export const postRouter = router;
