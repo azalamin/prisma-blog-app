@@ -5,6 +5,7 @@ import { PostController } from "./post.controller";
 const router = Router();
 
 router.get("/", PostController.getPosts);
+router.get("/:postId", PostController.getPostById);
 router.post("/", auth(UserRole.ADMIN, UserRole.USER), PostController.createPost);
 
 export const postRouter = router;
