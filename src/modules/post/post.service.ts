@@ -10,6 +10,7 @@ type GetPostsParams = {
 	authorId: string | undefined;
 	page: number;
 	limit: number;
+	skip: number;
 	sortBy: string | undefined;
 	sortOrder: string | undefined;
 };
@@ -37,11 +38,11 @@ const getPosts = async ({
 	authorId,
 	page,
 	limit,
+	skip,
 	sortBy,
 	sortOrder,
 }: GetPostsParams) => {
 	const queryConditions: PostWhereInput[] = [];
-	const skip = (page - 1) * limit;
 
 	if (search) {
 		queryConditions.push({
