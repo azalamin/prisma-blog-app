@@ -11,8 +11,8 @@ type GetPostsParams = {
 	page: number;
 	limit: number;
 	skip: number;
-	sortBy: string | undefined;
-	sortOrder: string | undefined;
+	sortBy: string;
+	sortOrder: string;
 };
 
 const createPost = async (
@@ -100,12 +100,9 @@ const getPosts = async ({
 		where: {
 			AND: queryConditions.length > 0 ? queryConditions : [],
 		},
-		orderBy:
-			sortBy && sortOrder
-				? {
-						[sortBy]: sortOrder,
-				  }
-				: { createdAt: "asc" },
+		orderBy: {
+			[sortBy]: sortOrder,
+		},
 	});
 
 	return result;
