@@ -8,6 +8,8 @@ type GetPostsParams = {
 	isFeatured: boolean | undefined;
 	status: PostStatus | undefined;
 	authorId: string | undefined;
+	page: number;
+	limit: number;
 };
 
 const createPost = async (
@@ -25,10 +27,17 @@ const createPost = async (
 	return result;
 };
 
-const getPosts = async ({ search, tags, isFeatured, status, authorId }: GetPostsParams) => {
+const getPosts = async ({
+	search,
+	tags,
+	isFeatured,
+	status,
+	authorId,
+	page,
+	limit,
+}: GetPostsParams) => {
 	const queryConditions: PostWhereInput[] = [];
-
-	console.log({ isFeatured });
+	const skip = (page - 1) * limit;
 
 	if (search) {
 		queryConditions.push({
@@ -81,6 +90,8 @@ const getPosts = async ({ search, tags, isFeatured, status, authorId }: GetPosts
 	}
 
 	const result = await prisma.post.findMany({
+		take: limit,
+		skip,
 		where: {
 			AND: queryConditions.length > 0 ? queryConditions : [],
 		},

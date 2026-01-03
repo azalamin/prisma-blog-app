@@ -42,12 +42,17 @@ const getPosts = async (req: Request, res: Response) => {
 
 		const authorId = req.query.authorId as string | undefined;
 
+		const page = Number(req.query.page ?? 1);
+		const limit = Number(req.query.limit ?? 10);
+
 		const result = await PostService.getPosts({
 			search: searchString,
 			tags,
 			isFeatured,
 			status,
 			authorId,
+			page,
+			limit,
 		});
 
 		res.status(200).json({
