@@ -42,6 +42,9 @@ const getPosts = async (req: Request, res: Response) => {
 
 		const authorId = req.query.authorId as string | undefined;
 
+		const sortBy = req.query.sortBy as string | undefined;
+		const sortOrder = req.query.sortOrder as string | undefined;
+
 		const page = Number(req.query.page ?? 1);
 		const limit = Number(req.query.limit ?? 10);
 
@@ -53,6 +56,8 @@ const getPosts = async (req: Request, res: Response) => {
 			authorId,
 			page,
 			limit,
+			sortBy,
+			sortOrder,
 		});
 
 		res.status(200).json({
