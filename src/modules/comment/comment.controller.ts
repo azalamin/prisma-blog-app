@@ -97,8 +97,9 @@ const moderateComment: RequestHandler = async (req, res) => {
 			data: result,
 		});
 	} catch (error) {
+		const errorMessage = error instanceof Error ? error.message : "Comment update failed";
 		res.status(400).json({
-			error: "Comment update failed",
+			error: errorMessage,
 			details: error,
 		});
 	}
