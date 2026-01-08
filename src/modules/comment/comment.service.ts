@@ -117,6 +117,10 @@ const moderateComment = async (commentId: string, data: { status: CommentStatus 
 		where: {
 			id: commentId,
 		},
+		select: {
+			id: true,
+			status: true,
+		},
 	});
 
 	if (commentData.status === data.status) {
