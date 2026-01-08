@@ -96,7 +96,6 @@ const getMyPosts = async (req: Request, res: Response) => {
 		if (!user) {
 			throw new Error("You are unauthorized!");
 		}
-
 		const result = await PostService.getMyPosts(user.id as string);
 
 		res.status(200).json({
