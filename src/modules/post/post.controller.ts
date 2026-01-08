@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import { PostStatus } from "../../../generated/prisma/enums";
 import paginationSortingHelper from "../../helpers/paginationSortingHelper";
 import { PostService } from "./post.service";
@@ -111,9 +111,31 @@ const getMyPosts = async (req: Request, res: Response) => {
 	}
 };
 
+const updatePost: RequestHandler = async (req, res) => {
+	try {
+		const { postId } = req.params;
+		const user = req.user;
+		if (!user) {
+			throw new Error("You are unauthorized!");
+		}
+		const result = await PostService.updatePost(postId as string, req.body, user.id as string);
+		res.status(200).json({
+			success: true,
+			data: result,
+		});
+	} catch (error) {
+		const errorMessage = error instanceof Error ? error.message : "Post update failed";
+		res.status(400).json({
+			error: errorMessage,
+			details: error,
+		});
+	}
+};
+
 export const PostController = {
 	createPost,
 	getPosts,
 	getPostById,
 	getMyPosts,
+	updatePost,
 };
