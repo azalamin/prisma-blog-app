@@ -1,6 +1,7 @@
 import { Request, RequestHandler, Response } from "express";
 import { PostStatus } from "../../../generated/prisma/enums";
 import paginationSortingHelper from "../../helpers/paginationSortingHelper";
+import { UserRole } from "../../middlewares/auth";
 import { PostService } from "./post.service";
 
 const createPost = async (req: Request, res: Response) => {
@@ -118,7 +119,15 @@ const updatePost: RequestHandler = async (req, res) => {
 		if (!user) {
 			throw new Error("You are unauthorized!");
 		}
-		const result = await PostService.updatePost(postId as string, req.body, user.id as string);
+
+		const isAdmin = user.role === UserRole.ADMIN;
+
+		const result = await PostService.updatePost(
+			postId as string,
+			req.body,
+			user.id as string,
+			isAdmin
+		);
 		res.status(200).json({
 			success: true,
 			data: result,
