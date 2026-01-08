@@ -112,10 +112,26 @@ const updateComment = async (
 	});
 };
 
+const moderateComment = async (commentId: string, data: { status: CommentStatus }) => {
+	await prisma.comment.findUniqueOrThrow({
+		where: {
+			id: commentId,
+		},
+	});
+
+	return await prisma.comment.update({
+		where: {
+			id: commentId,
+		},
+		data,
+	});
+};
+
 export const CommentService = {
 	createComment,
 	getCommentById,
 	getCommentsByAuthor,
 	deleteComment,
 	updateComment,
+	moderateComment,
 };
