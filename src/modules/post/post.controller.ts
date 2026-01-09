@@ -167,6 +167,23 @@ const deletePost: RequestHandler = async (req, res) => {
 	}
 };
 
+const getStats: RequestHandler = async (req, res) => {
+	try {
+		const result = await PostService.getStats();
+
+		res.status(200).json({
+			success: true,
+			data: result,
+		});
+	} catch (error) {
+		const errorMessage = error instanceof Error ? error.message : "Stats fetched failed";
+		res.status(400).json({
+			error: errorMessage,
+			details: error,
+		});
+	}
+};
+
 export const PostController = {
 	createPost,
 	getPosts,
@@ -174,4 +191,5 @@ export const PostController = {
 	getMyPosts,
 	updatePost,
 	deletePost,
+	getStats,
 };
