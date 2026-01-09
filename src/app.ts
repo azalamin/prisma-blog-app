@@ -3,6 +3,7 @@ import cors from "cors";
 import express, { Application } from "express";
 
 import { auth } from "./lib/auth";
+import errorHandler from "./middlewares/globalErrorHandler";
 import { commentRouter } from "./modules/comment/comment.router";
 import { postRouter } from "./modules/post/post.router";
 
@@ -25,5 +26,7 @@ app.use("/comments", commentRouter);
 app.get("/", (req, res) => {
 	res.send("Hello, World!");
 });
+
+app.use(errorHandler);
 
 export default app;
