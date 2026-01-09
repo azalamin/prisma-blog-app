@@ -109,7 +109,7 @@ const getMyPosts = async (req: Request, res: Response) => {
 	}
 };
 
-const updatePost: RequestHandler = async (req, res) => {
+const updatePost: RequestHandler = async (req, res, next) => {
 	try {
 		const { postId } = req.params;
 		const user = req.user;
@@ -130,11 +130,7 @@ const updatePost: RequestHandler = async (req, res) => {
 			data: result,
 		});
 	} catch (error) {
-		const errorMessage = error instanceof Error ? error.message : "Post update failed";
-		res.status(400).json({
-			error: errorMessage,
-			details: error,
-		});
+		next(error);
 	}
 };
 
