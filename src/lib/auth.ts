@@ -18,6 +18,16 @@ export const auth = betterAuth({
 		provider: "postgresql",
 	}),
 	trustedOrigins: [process.env.APP_URL!],
+
+	socialProviders: {
+		google: {
+			clientId: process.env.GOOGLE_CLIENT_ID as string,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+			accessType: "offline",
+			prompt: "select_account consent",
+		},
+	},
+
 	user: {
 		additionalFields: {
 			role: {
@@ -155,14 +165,6 @@ If you didn’t create this account, you can ignore this email.
 				console.error(error);
 				throw error;
 			}
-		},
-		socialProviders: {
-			google: {
-				clientId: process.env.GOOGLE_CLIENT_ID as string,
-				clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-				accessType: "offline",
-				prompt: "select_account consent",
-			},
 		},
 	},
 });

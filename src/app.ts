@@ -12,7 +12,7 @@ const app: Application = express();
 
 app.use(
 	cors({
-		origin: process.env.APP_URL || "http://locaholhost:5000",
+		origin: process.env.APP_URL || "http://locaholhost:3000",
 		credentials: true,
 	}),
 );
